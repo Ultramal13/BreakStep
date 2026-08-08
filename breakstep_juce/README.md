@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/breakstep_logo.png" alt="BreakStep Logo" width="100%">
+  <img src="assets/logo.png" alt="BreakStep Logo" width="600px">
 </p>
 
 <h1 align="center">BreakStep: Modular Drum Machine & MPC-Style Transient Slicer</h1>
@@ -146,7 +146,7 @@ open build/BreakStep_artefacts/Release/BreakStep.app
 ```
 BreakStep/
 ├── assets/
-│   └── breakstep_logo.png             # Official BreakStep logo mark
+│   └── logo.png                       # Official BreakStep logo
 ├── breakstep_juce/
 │   ├── CMakeLists.txt                 # CMake configuration for JUCE 8 & C++17
 │   ├── TECHNICAL_DOCUMENTATION.md     # Comprehensive technical documentation & math formulas
