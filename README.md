@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/breakstep_logo.png" alt="BreakStep Logo" width="95px">
+  <img src="assets/breakstep_logo.png" alt="BreakStep Logo" width="100%">
 </p>
 
 <h1 align="center">BreakStep: Modular Drum Machine & MPC-Style Transient Slicer</h1>
@@ -18,10 +18,6 @@
 **BreakStep** is a standalone, real-time audio workstation and step sequencer built in modern **C++17** and **JUCE 8**. It combines the raw, crunchy character of iconic 1990s hardware samplers (**Ensoniq EPS-16 Plus**, **Akai MPC-60**, and **Akai MPC-3000**) with an intelligent **Propellerhead ReCycle-style transient peak slicer** and an advanced **Drum & Bass step sequencer**.
 
 > **Note**: This is the initial foundational release (**v0.3.0**). The architecture has been deliberately designed as an extensible **modular workstation host** that will continuously integrate additional synthesis engines, bassline modules, and performance tools.
-
-<p align="center">
-  <img src="assets/breakstep_ui_screenshot.png" alt="BreakStep Modular Audio Workstation Interface" width="100%">
-</p>
 
 ---
 
@@ -150,8 +146,7 @@ open build/BreakStep_artefacts/Release/BreakStep.app
 ```
 BreakStep/
 ├── assets/
-│   ├── breakstep_logo.png             # Official BreakStep logo mark
-│   └── breakstep_ui_screenshot.png    # Live interface screenshot
+│   └── breakstep_logo.png             # Official BreakStep logo mark
 ├── breakstep_juce/
 │   ├── CMakeLists.txt                 # CMake configuration for JUCE 8 & C++17
 │   ├── TECHNICAL_DOCUMENTATION.md     # Comprehensive technical documentation & math formulas
