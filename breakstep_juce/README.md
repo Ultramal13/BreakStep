@@ -7,9 +7,11 @@
 
 **BreakStep** is a standalone, real-time audio workstation and step sequencer built in modern **C++17** and **JUCE 8**. It combines the raw, crunchy character of iconic 1990s hardware samplers (**Ensoniq EPS-16 Plus**, **Akai MPC-60**, and **Akai MPC-3000**) with an intelligent **Propellerhead ReCycle-style transient peak slicer** and an advanced **Drum & Bass step sequencer**.
 
+> **Note**: This is the initial foundational release (**v0.3.0**). The architecture has been deliberately designed as an extensible **modular workstation host** that will continuously integrate additional synthesis engines, bassline modules, and performance tools.
+
 ---
 
-## Key Features
+## Key Features (v0.3.0)
 
 ### 1. ReCycle-Style Waveform Lab & MPC Transient Chopper
 - **Multi-Slot Sample Memory**: Load up to 4 audio loops/breakbeats (`.wav`, `.aiff`, `.mp3`, `.flac`) into Slots 1–4.
@@ -50,6 +52,29 @@
 
 ---
 
+## Modular Expansion Roadmap
+
+BreakStep is designed to evolve into a complete hardware-style modular workstation. The following modules and capabilities are scheduled on the development roadmap:
+
+```mermaid
+graph TD
+    MasterWorkstation[BreakStep Workstation Core] --> DrumModule[1. BreakStep Drum Module - Completed v0.3]
+    MasterWorkstation --> ChopperModule[2. MPC ReCycle Chopper - Completed v0.3]
+    MasterWorkstation --> BassModule[3. Reese & Acid Bassline Synth Module - Roadmap]
+    MasterWorkstation --> MelodicModule[4. Polyphonic Pad / Sampler Module - Roadmap]
+    MasterWorkstation --> HardwareMidi[5. USB/MIDI Hardware Controller & MIDI Learn - Roadmap]
+    MasterWorkstation --> LiveMangler[6. Live Performance Mangler & Stutter Mode - Roadmap]
+    MasterWorkstation --> StemExport[7. Multi-Track WAV Stem Audio Exporter - Roadmap]
+```
+
+1. **Reese & 303 Acid Bassline Synth Module**: Dedicated monophonic synthesizer module with dual detuned saw waves, sub-oscillator, and resonant diode ladder filter for heavy Drum & Bass basslines.
+2. **Polyphonic Sample & Pad Module**: Multi-voice melodic sampler supporting sustain loops, ADSR envelopes, and chord memory.
+3. **USB / MIDI Hardware Controller & MIDI Learn**: Full MIDI mapping for external pad controllers (Akai MPK, Novation Launchpad, Arturia, Korg) and continuous CC knob mapping.
+4. **Live Performance Mangler & Instant Stutter**: Momentary beat-repeat pads ($1/4, 1/8, 1/16, 1/32$), vinyl brake effect, and VCA master glue bus compressor.
+5. **Multi-Track Stem Audio Exporter**: Offline rendering to 24-bit WAV/FLAC files (master mix and individual track stems) for live sets and DAW mixing.
+
+---
+
 ## Architecture & Signal Flow
 
 ```mermaid
@@ -71,6 +96,7 @@ graph TD
     SliceSequencer --> Submix[Submix Buffer]
     TrackTPT --> Submix
     TrackTPT --> ReverbSend[Reverb Send Buffer]
+    AudioSlicer --> ReverbSend
     ReverbSend --> GlobalReverb[juce::dsp::Reverb]
     GlobalReverb --> Submix
     Submix --> FeedbackDelay[Tempo-Synced Delay]
@@ -90,7 +116,7 @@ graph TD
 ### Compiling and Running
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/BreakStep.git
+git clone https://github.com/Ultramal13/BreakStep.git
 cd BreakStep/breakstep_juce
 
 # 2. Configure CMake with JUCE 8 (FetchContent will automatically download JUCE)
@@ -111,7 +137,8 @@ open build/BreakStep_artefacts/Release/BreakStep.app
 BreakStep/
 ├── breakstep_juce/
 │   ├── CMakeLists.txt                 # CMake configuration for JUCE 8 & C++17
-│   ├── DOCUMENTACION_TECNICA.md       # Comprehensive technical documentation & math formulas
+│   ├── TECHNICAL_DOCUMENTATION.md     # Comprehensive technical documentation & math formulas
+│   ├── USER_GUIDE.md                  # User manual & workflow guide
 │   ├── README.md                      # Project manual & build guide
 │   └── Source/
 │       ├── Main.cpp                   # Native desktop application entry point
@@ -143,4 +170,3 @@ This project is licensed under the **Creative Commons Attribution-NonCommercial 
 - **Under the following terms**:
   - **Attribution**: You must give appropriate credit to **Cristian Huerta (@Ultramal13)**.
   - **NonCommercial**: You may **NOT** use the material or derivatives for commercial advantage or monetary compensation without prior written permission from the author.
-
