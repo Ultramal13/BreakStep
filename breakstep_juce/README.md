@@ -5,6 +5,8 @@
 [![macOS](https://img.shields.io/badge/Platform-macOS-lightgrey?logo=apple)](https://apple.com)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
+![BreakStep Modular Audio Workstation Interface](assets/breakstep_ui_screenshot.png)
+
 **BreakStep** is a standalone, real-time audio workstation and step sequencer built in modern **C++17** and **JUCE 8**. It combines the raw, crunchy character of iconic 1990s hardware samplers (**Ensoniq EPS-16 Plus**, **Akai MPC-60**, and **Akai MPC-3000**) with an intelligent **Propellerhead ReCycle-style transient peak slicer** and an advanced **Drum & Bass step sequencer**.
 
 > **Note**: This is the initial foundational release (**v0.3.0**). The architecture has been deliberately designed as an extensible **modular workstation host** that will continuously integrate additional synthesis engines, bassline modules, and performance tools.
@@ -135,6 +137,8 @@ open build/BreakStep_artefacts/Release/BreakStep.app
 
 ```
 BreakStep/
+├── assets/
+│   └── breakstep_ui_screenshot.png    # Live interface screenshot
 ├── breakstep_juce/
 │   ├── CMakeLists.txt                 # CMake configuration for JUCE 8 & C++17
 │   ├── TECHNICAL_DOCUMENTATION.md     # Comprehensive technical documentation & math formulas
