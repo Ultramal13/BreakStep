@@ -1,6 +1,6 @@
 # BreakStep User Guide & Workflow Manual
 
-Welcome to **BreakStep**, a modular Drum & Bass workstation and transient sample chopper designed for electronic music producers.
+Welcome to **BreakStep**, a modular Drum & Bass workstation, transient sample chopper, and song arranger designed for electronic music producers.
 
 ---
 
@@ -8,12 +8,15 @@ Welcome to **BreakStep**, a modular Drum & Bass workstation and transient sample
 
 ### 1.1 Master Transport & Global Controls
 - **`PLAY` / `STOP`**: Starts and stops the sample-accurate master clock.
-- **`TEMPO` (BPM)**: Adjusts speed from 60 to 200 BPM (default: 170 BPM for Drum & Bass / Jungle).
+- **`PATTERN` vs. `SONG` Mode**:
+  - `[ PATTERN ]`: Loops the currently selected pattern indefinitely for live jam sessions and beat creation.
+  - `[ SONG ]`: Plays the 32-bar linear arrangement from Bar 1 to 32, automatically switching patterns across the song timeline.
+- **`STYLE PRESETS` Dropdown**: 1-click loading of authentic electronic genres (**DnB Roller 174**, **Jungle Amen 168**, **Dubstep 140**, **UK Garage 132**, **UK Bass 138**, **Nu-Skool Breaks 135**, **Liquid DnB 172**).
+- **`P1` to `P8` Pattern Selectors**: Instantly audition and edit any of the 8 pattern banks.
+- **`DRUMS` & `CHOP` Bus Volume Knobs**: Independently balance the overall volume of the drum machine and the loop slicer with single rotary controls.
+- **`TEMPO` (BPM)**: Adjusts speed from 60 to 200 BPM.
 - **`SWING`**: Injects groovy MPC-style shuffle into odd 16th-note steps.
 - **`DELAY` & `MASTER FILTER`**: Global master tempo-synced feedback delay and continuous lowpass resonant filter.
-- **`CLR ALL` & `RND ALL`**:
-  - `CLR ALL` (Red): Instantly wipes all step pattern matrices.
-  - `RND ALL` (Green): Generates a full, intelligent Drum & Bass groove across all 7 tracks in one click.
 
 ---
 
@@ -33,27 +36,22 @@ Welcome to **BreakStep**, a modular Drum & Bass workstation and transient sample
 
 ---
 
-## 3. Unified 7-Track Step Sequencer
+## 3. Propellerhead Reason-Style Linear Song Timeline Arranger
 
-### 3.1 Track 0: `✂️ CHOP SEQ`
-- **Left-Click on a Step Pad**: Toggles the step on/off (glowing cyan).
-- **Right-Click / Ctrl-Click on a Step Pad**: Cycles which slice (`S1` to `S16`) is triggered on that step.
-- **`1x` / `2x` / `3x` / `4x` (Ratchets)**: Subdivides the step into rapid micro-rolls (1/32 and 1/64 rolls).
-- **`100%` / `75%` / `50%` / `25%` (Probability)**: Sets the random trigger chance for dynamic, non-repetitive grooves.
-
-### 3.2 Tracks 1–6: BreakStep Drum Machine
-- **6 Drum Voices**: `KICK`, `SNARE`, `HAT`, `OPEN HAT`, `CLAP`, and `PERC`.
-- **Vintage Sampler DSP Button**: Cycle between:
-  - **`CLEAN`**: Modern 32-bit floating-point Hi-Fi.
-  - **`MPC-60`**: 12-bit / 40kHz punch with transformer analog saturation.
-  - **`MPC-3K`**: 16-bit warmth with asymmetric op-amp tape saturation.
-  - **`EPS-16`**: Ensoniq OTIS variable bit decimation and gritty aliasing crunch.
-- **`CRUNCH` Knob**: Dial in the exact amount of vintage distortion and bit reduction.
-- **`CLR` & `RND` per Track**: Clear or randomize individual drum patterns independently.
+The **Song Timeline** allows arranging full tracks using visual pattern blocks across 32 bars:
+- **`DRUMS` Lane**:
+  - Left-click a bar: Cycles the drum pattern (`D1` $\to$ `D2` $\to$ ... $\to$ `D8` $\to$ `---`).
+  - Right-click a bar: Mutes that bar (`---`).
+- **`CHOPS` Lane**:
+  - Left-click a bar: Cycles the slice chop pattern (`S1` $\to$ `S2` $\to$ ... $\to$ `S8` $\to$ `---`).
+  - Right-click a bar: Mutes that bar (`---`).
+- **`CLEAR ARR`**: Wipes the timeline arrangement clean.
+- **`STD DNB ARR`**: Generates a standard electronic song structure (Intro $\to$ Build $\to$ Drop $\to$ Breakdown $\to$ Drop 2 $\to$ Outro).
+- **`REPEAT 1-4`**: Copies the first 4 bars across the entire 32-bar timeline.
 
 ---
 
 ## 4. Saving & Loading Sessions
 
-- Click **`SAVE PROJ`** to export a complete `.breakstep` JSON session file (persisting BPM, swing, FX, track settings, slice markers, and sample paths).
-- Click **`LOAD PROJ`** to restore any previously saved session instantly.
+- Click **`SAVE`** to export a complete `.breakstep` JSON session file (persisting BPM, swing, FX, track settings, all 8 pattern banks, timeline arrangement, and sample paths).
+- Click **`LOAD`** to restore any previously saved session instantly.

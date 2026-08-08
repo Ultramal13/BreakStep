@@ -11,7 +11,12 @@ struct StepTrigger
 {
     int trackIndex;
     int velocityState; // 1 = Normal, 2 = Accent
-    int sampleOffset;  // Sample offset inside the audio block
+    int sampleOffset;  // Sub-sample timing within block
+};
+
+struct DrumPattern
+{
+    int steps[6][32] = { { 0 } };
 };
 
 class StepSequencer
@@ -19,6 +24,7 @@ class StepSequencer
 public:
     static constexpr int NUM_TRACKS = 6;
     static constexpr int NUM_STEPS = 32;
+    static constexpr int NUM_PATTERNS = 8;
 
     StepSequencer();
 
@@ -42,16 +48,26 @@ public:
         currentStep.store(-1);
     }
 
-    // Step state: 0 = Off, 1 = Normal, 2 = Accent
+    // Pattern Bank Management (0..7)
+    void setActivePattern(int patternIndex);
+    int getActivePattern() const { return activePatternIndex.load(); }
+
     int getStepState(int trackIndex, int stepIndex) const;
     void setStepState(int trackIndex, int stepIndex, int state);
     void toggleStepState(int trackIndex, int stepIndex);
 
-    // Clear and Randomize functions
+    int getPatternStepState(int ptnIndex, int trackIndex, int stepIndex) const;
+    void setPatternStepState(int ptnIndex, int trackIndex, int stepIndex, int state);
+
     void clearTrack(int trackIndex);
+    void clearPattern(int ptnIndex);
     void clearAllTracks();
+
     void randomizeTrack(int trackIndex);
+    void randomizePattern(int ptnIndex);
     void randomizeAllTracks();
+
+    void copyPattern(int srcPattern, int dstPattern);
 
     int getCurrentStep() const { return currentStep.load(); }
 
@@ -62,8 +78,9 @@ private:
     std::atomic<double> swing { 0.0 };
     std::atomic<bool> playing { false };
     std::atomic<int> currentStep { -1 };
+    std::atomic<int> activePatternIndex { 0 };
 
-    int stepGrid[NUM_TRACKS][NUM_STEPS];
+    DrumPattern patterns[NUM_PATTERNS];
 
     double sampleCounter = 0.0;
     int internalStep = 0;

@@ -11,6 +11,13 @@ MainComponent::MainComponent()
             row->setViewBank(bank);
         }
     };
+    headerComponent->onPatternChanged = [this](int /*patternIndex*/) {
+        for (auto& row : trackRows)
+        {
+            row->updateAllControlsFromState();
+        }
+        if (chopTrackRow) chopTrackRow->updateAllControls();
+    };
     headerComponent->onViewChanged = [this](int viewIndex) {
         setView(viewIndex);
     };
@@ -21,6 +28,7 @@ MainComponent::MainComponent()
         }
         if (chopperComponent) chopperComponent->updateAllControls();
         if (chopTrackRow) chopTrackRow->updateAllControls();
+        if (timelineComponent) timelineComponent->repaint();
     };
     headerComponent->onStateChanged = [this]() {
         for (auto& row : trackRows)
@@ -28,6 +36,8 @@ MainComponent::MainComponent()
             row->updateAllControlsFromState();
         }
         if (chopTrackRow) chopTrackRow->updateAllControls();
+        if (chopperComponent) chopperComponent->updateAllControls();
+        if (timelineComponent) timelineComponent->repaint();
     };
     addAndMakeVisible(*headerComponent);
 
@@ -50,6 +60,10 @@ MainComponent::MainComponent()
         trackRows.push_back(std::move(row));
     }
 
+    // 4. Reason-Style Linear Song Timeline Arranger
+    timelineComponent = std::make_unique<BreakStepUI::SongTimelineComponent>(audioEngine);
+    contentContainer->addAndMakeVisible(*timelineComponent);
+
     viewport.setViewedComponent(contentContainer.get(), false);
     viewport.setScrollBarsShown(true, false);
     viewport.setScrollBarThickness(10);
@@ -58,8 +72,8 @@ MainComponent::MainComponent()
     setSize(1040, 720);
     setAudioChannels(0, 2);
 
-    // Set default view to ALL TRACKS (complete unified screen)
-    setView(2);
+    // Set default view to ALL (Chopper + Drums + Timeline)
+    setView(3);
 
     // 60Hz UI refresh timer for playheads
     startTimerHz(60);
@@ -80,22 +94,29 @@ void MainComponent::setView(int viewIndex)
     {
         chopperComponent->setVisible(true);
         chopTrackRow->setVisible(true);
-        for (auto& row : trackRows)
-            row->setVisible(false);
+        for (auto& row : trackRows) row->setVisible(false);
+        timelineComponent->setVisible(false);
     }
     else if (currentView == 1) // Drum Machine Only
     {
         chopperComponent->setVisible(false);
         chopTrackRow->setVisible(false);
-        for (auto& row : trackRows)
-            row->setVisible(true);
+        for (auto& row : trackRows) row->setVisible(true);
+        timelineComponent->setVisible(false);
+    }
+    else if (currentView == 2) // Timeline Only
+    {
+        chopperComponent->setVisible(false);
+        chopTrackRow->setVisible(false);
+        for (auto& row : trackRows) row->setVisible(false);
+        timelineComponent->setVisible(true);
     }
     else // All Tracks View (Full Workstation with scroll)
     {
         chopperComponent->setVisible(true);
         chopTrackRow->setVisible(true);
-        for (auto& row : trackRows)
-            row->setVisible(true);
+        for (auto& row : trackRows) row->setVisible(true);
+        timelineComponent->setVisible(true);
     }
 
     resized();
@@ -135,7 +156,6 @@ void MainComponent::resized()
 
     viewport.setBounds(margin, viewY, viewW, viewH);
 
-    // Layout inside content container
     int contentW = viewW - (viewport.isVerticalScrollBarShown() ? 14 : 0);
     int y = 4;
 
@@ -164,6 +184,14 @@ void MainComponent::resized()
 
         contentContainer->setBounds(0, 0, contentW, y);
     }
+    else if (currentView == 2) // Timeline Only
+    {
+        int tlH = 114;
+        timelineComponent->setBounds(0, y, contentW, tlH);
+        y += tlH + 8;
+
+        contentContainer->setBounds(0, 0, contentW, y);
+    }
     else // All Tracks View (Full Workstation with scroll)
     {
         int chopperH = 212;
@@ -182,6 +210,11 @@ void MainComponent::resized()
             row->setBounds(0, y, contentW, rowHeight);
             y += rowHeight + rowGap;
         }
+        y += 4;
+
+        int tlH = 114;
+        timelineComponent->setBounds(0, y, contentW, tlH);
+        y += tlH + 10;
 
         contentContainer->setBounds(0, 0, contentW, y + 10);
     }
@@ -208,6 +241,28 @@ void MainComponent::timerCallback()
         if (chopTrackRow)
         {
             chopTrackRow->updatePlayhead(currentSlice);
+        }
+    }
+
+    // Update Song Timeline Playhead in Song Mode
+    if (timelineComponent && timelineComponent->isVisible())
+    {
+        if (audioEngine.getPlaybackMode() == BreakStepAudio::PlaybackMode::SongTimeline &&
+            audioEngine.getSequencer().isPlaying())
+        {
+            timelineComponent->updatePlayhead();
+
+            // Refresh track rows if the active pattern changed on a new bar
+            int currentBar = audioEngine.getSongTimeline().getCurrentBar();
+            if (currentBar != lastSongBar)
+            {
+                lastSongBar = currentBar;
+                for (auto& row : trackRows)
+                {
+                    row->updateAllControlsFromState();
+                }
+                if (chopTrackRow) chopTrackRow->updateAllControls();
+            }
         }
     }
 }

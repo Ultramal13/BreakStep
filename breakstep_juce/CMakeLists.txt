@@ -38,6 +38,10 @@ target_sources(BreakStep PRIVATE
     Source/Audio/DrumTrack.cpp
     Source/Audio/AudioEngine.h
     Source/Audio/AudioEngine.cpp
+    Source/Audio/SongTimeline.h
+    Source/Audio/SongTimeline.cpp
+    Source/Audio/StyleTemplates.h
+    Source/Audio/StyleTemplates.cpp
     Source/Audio/SampleChopper/AudioSlicer.h
     Source/Audio/SampleChopper/AudioSlicer.cpp
     Source/Audio/SampleChopper/SliceSequencer.h
@@ -54,6 +58,8 @@ target_sources(BreakStep PRIVATE
     Source/UI/ChopTrackRowComponent.cpp
     Source/UI/ChopperWaveformComponent.h
     Source/UI/ChopperWaveformComponent.cpp
+    Source/UI/SongTimelineComponent.h
+    Source/UI/SongTimelineComponent.cpp
 )
 
 target_compile_definitions(BreakStep PRIVATE

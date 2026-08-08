@@ -26,10 +26,16 @@ struct SliceStep
     int pitchOffset = 0;       // -12 .. +12 semitones
 };
 
+struct SlicePattern
+{
+    SliceStep steps[16];
+};
+
 class SliceSequencer
 {
 public:
     static constexpr int NUM_STEPS = 16;
+    static constexpr int NUM_PATTERNS = 8;
 
     SliceSequencer();
 
@@ -50,6 +56,10 @@ public:
         currentStep.store(-1);
     }
 
+    // Pattern Bank Management (0..7)
+    void setActivePattern(int patternIndex);
+    int getActivePattern() const { return activePatternIndex.load(); }
+
     SliceStep getStep(int index) const;
     void setStep(int index, const SliceStep& step);
     void toggleStepActive(int index);
@@ -58,9 +68,15 @@ public:
     void cycleProbability(int index);
     void toggleReverse(int index);
 
-    // Clear and Randomize for Chop Track
+    SliceStep getPatternStep(int ptnIndex, int stepIndex) const;
+    void setPatternStep(int ptnIndex, int stepIndex, const SliceStep& step);
+
+    // Clear and Randomize
     void clear();
+    void clearPattern(int ptnIndex);
     void randomize();
+    void randomizePattern(int ptnIndex);
+    void copyPattern(int srcPattern, int dstPattern);
 
     int getCurrentStep() const { return currentStep.load(); }
 
@@ -74,8 +90,9 @@ private:
     std::atomic<double> bpm { 170.0 };
     std::atomic<bool> playing { false };
     std::atomic<int> currentStep { -1 };
+    std::atomic<int> activePatternIndex { 0 };
 
-    SliceStep steps[NUM_STEPS];
+    SlicePattern patterns[NUM_PATTERNS];
 
     double sampleCounter = 0.0;
     int internalStep = 0;

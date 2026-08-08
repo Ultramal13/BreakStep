@@ -1,18 +1,18 @@
 #pragma once
 
 #include <juce_gui_extra/juce_gui_extra.h>
-#include <juce_audio_utils/juce_audio_utils.h>
 #include "Audio/AudioEngine.h"
 #include "UI/CustomLookAndFeel.h"
 #include "UI/HeaderComponent.h"
 #include "UI/TrackRowComponent.h"
 #include "UI/ChopTrackRowComponent.h"
 #include "UI/ChopperWaveformComponent.h"
-#include <memory>
+#include "UI/SongTimelineComponent.h"
 #include <vector>
+#include <memory>
 
 class MainComponent : public juce::AudioAppComponent,
-                      public juce::Timer
+                      private juce::Timer
 {
 public:
     MainComponent();
@@ -25,28 +25,27 @@ public:
     void paint(juce::Graphics& g) override;
     void resized() override;
 
-    void timerCallback() override;
-
-private:
     void setView(int viewIndex);
 
-    BreakStepUI::CustomLookAndFeel customLookAndFeel;
+private:
+    void timerCallback() override;
+
     BreakStepAudio::AudioEngine audioEngine;
+    BreakStepUI::CustomLookAndFeel customLookAndFeel;
 
     std::unique_ptr<BreakStepUI::HeaderComponent> headerComponent;
-
-    // Scrollable Viewport and content container
-    juce::Viewport viewport;
-    std::unique_ptr<juce::Component> contentContainer;
-
-    // Workstation Modules
     std::unique_ptr<BreakStepUI::ChopperWaveformComponent> chopperComponent;
     std::unique_ptr<BreakStepUI::ChopTrackRowComponent> chopTrackRow;
     std::vector<std::unique_ptr<BreakStepUI::TrackRowComponent>> trackRows;
+    std::unique_ptr<BreakStepUI::SongTimelineComponent> timelineComponent;
 
-    int currentView = 2; // 0 = Chopper, 1 = Drums, 2 = All
+    juce::Viewport viewport;
+    std::unique_ptr<juce::Component> contentContainer;
+
     int lastPlayheadStep = -1;
     int lastSliceStep = -1;
+    int lastSongBar = -1;
+    int currentView = 3; // All (Chopper + Drums + Timeline)
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };
