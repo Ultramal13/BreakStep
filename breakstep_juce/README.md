@@ -1,15 +1,31 @@
-# BreakStep: Modular Drum Machine & MPC-Style Transient Slicer Workstation
+<p align="center">
+  <img src="assets/breakstep_banner.png" alt="BreakStep Modular Audio Workstation Banner" width="100%">
+</p>
 
-[![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C?logo=cplusplus)](https://isocpp.org/)
-[![JUCE 8](https://img.shields.io/badge/JUCE-8.0.4-orange?logo=c%2B%2B)](https://juce.com/)
-[![macOS](https://img.shields.io/badge/Platform-macOS-lightgrey?logo=apple)](https://apple.com)
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+<p align="center">
+  <img src="assets/breakstep_logo.png" alt="BreakStep Logo" width="180px">
+</p>
 
-![BreakStep Modular Audio Workstation Interface](assets/breakstep_ui_screenshot.png)
+<h1 align="center">BreakStep: Modular Drum Machine & MPC-Style Transient Slicer</h1>
+
+<p align="center">
+  <a href="https://isocpp.org/"><img src="https://img.shields.io/badge/C%2B%2B-17-00599C?logo=cplusplus" alt="C++17"></a>
+  <a href="https://juce.com/"><img src="https://img.shields.io/badge/JUCE-8.0.4-orange?logo=c%2B%2B" alt="JUCE 8"></a>
+  <a href="https://apple.com"><img src="https://img.shields.io/badge/Platform-macOS-lightgrey?logo=apple" alt="macOS"></a>
+  <a href="https://creativecommons.org/licenses/by-nc/4.0/"><img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg" alt="License: CC BY-NC 4.0"></a>
+</p>
+
+---
+
+## Overview
 
 **BreakStep** is a standalone, real-time audio workstation and step sequencer built in modern **C++17** and **JUCE 8**. It combines the raw, crunchy character of iconic 1990s hardware samplers (**Ensoniq EPS-16 Plus**, **Akai MPC-60**, and **Akai MPC-3000**) with an intelligent **Propellerhead ReCycle-style transient peak slicer** and an advanced **Drum & Bass step sequencer**.
 
 > **Note**: This is the initial foundational release (**v0.3.0**). The architecture has been deliberately designed as an extensible **modular workstation host** that will continuously integrate additional synthesis engines, bassline modules, and performance tools.
+
+<p align="center">
+  <img src="assets/breakstep_ui_screenshot.png" alt="BreakStep Modular Audio Workstation Interface" width="100%">
+</p>
 
 ---
 
@@ -138,6 +154,8 @@ open build/BreakStep_artefacts/Release/BreakStep.app
 ```
 BreakStep/
 ├── assets/
+│   ├── breakstep_banner.png           # GitHub repository header banner
+│   ├── breakstep_logo.png             # Official BreakStep logo mark
 │   └── breakstep_ui_screenshot.png    # Live interface screenshot
 ├── breakstep_juce/
 │   ├── CMakeLists.txt                 # CMake configuration for JUCE 8 & C++17
