@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="assets/logo.png" alt="BreakStep Logo" width="600px">
-</p>
-
-<h1 align="center">BreakStep: Modular Drum Machine & MPC-Style Transient Slicer</h1>
+# BreakStep: Modular Drum Machine & MPC-Style Transient Slicer
 
 <p align="center">
   <a href="https://isocpp.org/"><img src="https://img.shields.io/badge/C%2B%2B-17-00599C?logo=cplusplus" alt="C++17"></a>
@@ -145,8 +141,6 @@ open build/BreakStep_artefacts/Release/BreakStep.app
 
 ```
 BreakStep/
-├── assets/
-│   └── logo.png                       # Official BreakStep logo
 ├── breakstep_juce/
 │   ├── CMakeLists.txt                 # CMake configuration for JUCE 8 & C++17
 │   ├── TECHNICAL_DOCUMENTATION.md     # Comprehensive technical documentation & math formulas
