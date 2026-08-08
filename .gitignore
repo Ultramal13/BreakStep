@@ -6,6 +6,12 @@ lib/
 *.app/
 BreakStep_artefacts/
 
+# Archives & Installers
+*.dmg
+*.zip
+*.tar.gz
+breakstep_frontend/
+
 # IDE and OS files
 .DS_Store
 .vscode/
