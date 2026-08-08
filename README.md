@@ -1,9 +1,5 @@
 <p align="center">
-  <img src="assets/breakstep_banner.png" alt="BreakStep Modular Audio Workstation Banner" width="100%">
-</p>
-
-<p align="center">
-  <img src="assets/breakstep_logo.png" alt="BreakStep Logo" width="180px">
+  <img src="assets/breakstep_logo.png" alt="BreakStep Logo" width="95px">
 </p>
 
 <h1 align="center">BreakStep: Modular Drum Machine & MPC-Style Transient Slicer</h1>
@@ -154,7 +150,6 @@ open build/BreakStep_artefacts/Release/BreakStep.app
 ```
 BreakStep/
 ├── assets/
-│   ├── breakstep_banner.png           # GitHub repository header banner
 │   ├── breakstep_logo.png             # Official BreakStep logo mark
 │   └── breakstep_ui_screenshot.png    # Live interface screenshot
 ├── breakstep_juce/
