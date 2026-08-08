@@ -69,7 +69,7 @@ El proyecto utiliza los módulos oficiales de **JUCE 8** compilados con AppleCla
 
 ## 3. Modelado de Samplers Vintage (EPS-16+, MPC-60, MPC-3000)
 
-En [`VintageSamplerDSP.h`](file:///Users/cristianhuerta/Desktop/PROYECTOS/BreakStep/breakstep_juce/Source/Audio/VintageSamplerDSP.h), cada pista cuenta con un motor de modelado físico de convertidores y preamplificadores vintage:
+En `Source/Audio/VintageSamplerDSP.h`, cada pista cuenta con un motor de modelado físico de convertidores y preamplificadores vintage:
 
 ### 3.1 Modo `CLEAN` (Hi-Fi Digital 32-bit Float)
 - Rango dinámico completo de 32 bits en coma flotante (>140 dB SNR).
@@ -89,6 +89,24 @@ Modela el sonido cálido, grueso y con graves definidos de la MPC-3000 (1994):
 2. **Saturación Armónica Asimétrica**: Curva de saturación tipo cinta / transistor discreto:
    $$y = 1.5 \cdot x - 0.5 \cdot x^3 \quad (\text{para } |x| \le 1)$$
 
+### 3.4 Modo `EPS-16 Plus` (Ensoniq OTIS Chip Crunch & Aliasing)
+El sonido característico de los samplers Ensoniq de principios de los 90s, clave en la historia del Drum & Bass:
+1. **Cuantización Variable (13-bit $\to$ 8-bit)**: El chip OTIS de Ensoniq operaba con punto flotante simulado y grano digital áspero.
+2. **Diezmado Sample-and-Hold Agresivo (31.25 kHz $\to$ 11.2 kHz)**: Reproduce la falta de filtros de reconstrucción anti-aliasing pesados, generando los armónicos ásperos y metálicos característicos al acelerar breakbeats.
+
+### 3.5 Motor de Corte de Picos de Transientes (Tipo ReCycle / Propellerhead)
+El motor de troceado (`AudioSlicer`) implementa una cadena de detección adaptativa inspirada en **Propellerhead ReCycle**:
+1. **Pre-énfasis Espectral de Altas Frecuencias**:
+   $$y[n] = x[n] - 0.92 \cdot x[n-1]$$
+   Resalta los ataques percusivos rápidos (el *snap* de la caja, el *beater* del bombo y el golpe del hi-hat) diferenciándolos del cuerpo tonal o reverberación sostenida.
+2. **Seguidores de Envolvente Dual**:
+   - Ataque ultra-rápido ($\tau_{\text{attack}} \approx 1.2\text{ms}$) para capturar el instante exacto del transiente.
+   - Piso base adaptativo ($\tau_{\text{decay}} \approx 30\text{ms}$) para evitar falsos disparos en la cola de los sonidos.
+3. **Alineación a Cruce por Cero (*Zero-Crossing Snapping*)**:
+   - Cada punto de corte detectado o editado manualmente se desplaza automáticamente hacia la muestra más cercana donde:
+     $$x[n] \cdot x[n-1] \le 0 \quad \text{y} \quad |x[n]| \to 0$$
+   - Esto previene completamente *clicks*, *pops* o chasquidos al reproducir los slices fuera de orden o en reversa.
+
 ### 3.6 Arquitectura de la Workstation Unificada de 7 Pistas
 La pantalla principal integra todo el flujo en una única vista organizada:
 1. **Laboratorio Superior de Waveform & MPC Chopper**:
@@ -102,8 +120,10 @@ La pantalla principal integra todo el flujo en una única vista organizada:
      - Click derecho o Ctrl+Click: Asigna qué corte (`S1` a `S16`) suena en ese paso.
      - Botón `1x/2x/3x/4x`: Activa *ratchets* (redobles ultrarrápidos para Drum & Bass).
      - Botón `100%/75%/50%/25%`: Probabilidad de disparo.
+     - Botones `CLR` y `RND`: Borrado y generación aleatoria del patrón de cortes.
    - **Pistas 1 a 6 (`KICK`, `SNARE`, `HAT`, `OPEN HAT`, `CLAP`, `PERC`)**:
      - Las 6 pistas de batería con botones vintage (**`CLEAN`**, **`MPC-60`**, **`MPC-3K`**, **`EPS-16`**) y perilla de **`CRUNCH`**.
+     - Botones `CLR` y `RND` por cada canal para crear ritmos independientes.
      - Todos los canales y el Chop Track tocan en sincronía matemática sample-accurate sobre el mismo reloj maestro.
 
 ---
@@ -127,6 +147,7 @@ Cuando no se carga ningún sample externo, BreakStep genera matemáticamente sus
 
 El archivo de proyecto `.breakstep` es un documento JSON estructurado que persiste:
 - **Global**: `bpm`, `swing`, `delayWet`, `masterCutoff`.
+- **Slicer**: `loadedFilePath`, `activeSlot`, `volume`, `cutoff`, `reverbSend`, y array de pasos de `sliceSequence` (sliceIndex, ratchets, probability, reverse, pitchOffset).
 - **Pistas (Tracks 0 a 5)**:
   - `name`, `sampleName`, `samplePath` (Ruta absoluta en el disco para recarga automática).
   - `volume`, `pitch`, `attack`, `cutoff`, `length`, `reverbSend`.
@@ -141,14 +162,15 @@ El archivo de proyecto `.breakstep` es un documento JSON estructurado que persis
 
 ### Compilación desde Terminal (macOS):
 ```bash
-cd /Users/cristianhuerta/Desktop/PROYECTOS/BreakStep/breakstep_juce
+# 1. Entrar al directorio del proyecto JUCE
+cd breakstep_juce
 
-# 1. Configurar CMake con JUCE 8
-/opt/homebrew/bin/cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0
+# 2. Configurar CMake con JUCE 8
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0
 
-# 2. Compilar binario nativo optimizado (-j8 para todos los núcleos)
-/opt/homebrew/bin/cmake --build build --config Release -j8
+# 3. Compilar binario nativo optimizado (-j8 para todos los núcleos)
+cmake --build build --config Release -j8
 
-# 3. Ejecutar la aplicación
+# 4. Ejecutar la aplicación
 open build/BreakStep_artefacts/Release/BreakStep.app
 ```
